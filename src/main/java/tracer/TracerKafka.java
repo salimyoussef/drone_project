@@ -50,8 +50,8 @@ public class TracerKafka {
         for (final KafkaStream stream : streams) {
             ConsumerIterator<byte[], byte[]> iterator = stream.iterator();
             String position = new String(iterator.next().message(), StandardCharsets.UTF_8);
-            //just this error cause i need to new how the message will be published in order to serialized it in order to put it the object point
-            //also i need to test the if this cause work or not
+            //just this error cause i need to know how the message will be published in order to serialized it in order to put it the object point
+            //also i need to test it to know if it works or not
             tracer.notify((PathPoint)position);
 
             executor.submit(new Tracer(stream, threadNumber));
