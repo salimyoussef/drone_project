@@ -1,16 +1,16 @@
-# RESTful web services with Jersey
+﻿## RESTful web services with Jersey
 Test Server：Tomcat 6.0
 
-# POST Service URI
+### POST Service URI
 
-http://localhost:8080/FAAserver/service/drone/position
-http://localhost:8080/FAAserver/service/drone/position
+- http://localhost:8080/FAAserver/service/drone/position
+- http://localhost:8080/FAAserver/service/drone/position
 
-# GET Service URI
+### GET Service URI
 
-http://localhost:8080/FAAserver/service/drone/welcome
+- http://localhost:8080/FAAserver/service/drone/welcome
 
-# Sample Code for POST Service
+### Sample Code for POST Service
 
 ```sh
 import com.sun.jersey.api.client.Client;
