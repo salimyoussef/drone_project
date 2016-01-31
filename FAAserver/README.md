@@ -3,7 +3,7 @@ Test Server：Tomcat 6.0
 
 ### POST Service URI
 
-- http://localhost:8080/FAAserver/service/drone/position
+- http://localhost:8080/FAAserver/service/drone/path
 - http://localhost:8080/FAAserver/service/drone/position
 
 ### GET Service URI
