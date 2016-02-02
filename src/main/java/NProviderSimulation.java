@@ -48,13 +48,13 @@ public class NProviderSimulation {
             System.out.println(start + ":" + destination);
             Path p = pathPlanner.findPath(new AdressEndPoints(start, destination));
 
-            /*ArrayList<PathPoint> path = new ArrayList<>();
+            ArrayList<PathPoint> path = new ArrayList<>();
             for(int i=0; i<30;i++){
                 path.add(new PathPoint(10+i,20,12));
-            }*/
+            }
 
             CommandsProvider provider = new CommandsProvider("drone"+id);
-            provider.setPath(p.getPathPoints());
+            provider.setPath(path);
             provider.sendCommands();
         }
 

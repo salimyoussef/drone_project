@@ -1,21 +1,23 @@
 package communicator;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import path.PathPoint;
 
-import org.json.JSONObject;
-
-/**
- * Created by farouk khouly on 1/29/2016.
- */
-public class ThreadForCommunicator implements Runnable {
-
+public class PathReceiverForCommunicator implements Runnable {
 	private KafkaStream<byte[], byte[]> m_stream;
 	private int m_threadNumber;
 	private Communicator receiver;
 
-	public ThreadForCommunicator(KafkaStream<byte[], byte[]> a_stream, int a_threadNumber, Communicator receiver) {
+	public PathReceiverForCommunicator(KafkaStream<byte[], byte[]> a_stream, int a_threadNumber,
+			Communicator receiver) {
 
 		m_stream = a_stream;
 		m_threadNumber = a_threadNumber;
@@ -25,19 +27,13 @@ public class ThreadForCommunicator implements Runnable {
 
 	public void run() {
 		ConsumerIterator<byte[], byte[]> it = m_stream.iterator();
-		int compt = 0;
 
 		while (it.hasNext()) {
-			compt++;
 			String msg = new String(it.next().message());
 
 			// method for sending the json(postion) with interval (not every
 			// position)
-			if (compt % 10 == 0) {
-				JSONObject json = new JSONObject(msg);
-				PathPoint p = new PathPoint(json.getDouble("x"), json.getDouble("y"), json.getDouble("z"));
-				receiver.sendPosition(p);
-			}
+				receiver.sendPath(msg);
 
 			// "("+json.getString("x")+","+json.getString("y")+","+json.getString("z")+")
 			// ***");

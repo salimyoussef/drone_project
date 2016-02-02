@@ -56,7 +56,7 @@ public class Tracer implements TracerIF {
 		//
 		int threadNumber = 0;
 		for (final KafkaStream stream : streams) {
-			executor.submit(new ConsumerTest(stream, threadNumber,drone));
+			executor.submit(new ConsumerTest(stream, threadNumber,drone,this));
 			threadNumber++;
 		}
 	}

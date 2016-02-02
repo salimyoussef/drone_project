@@ -1,4 +1,4 @@
-package communicator;
+/*package communicator;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -21,4 +21,4 @@ public class InformationSender {
 			e.printStackTrace();
 		}
 	}
-}
+}*/

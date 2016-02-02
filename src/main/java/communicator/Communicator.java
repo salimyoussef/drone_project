@@ -19,75 +19,96 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-public class Communicator{
+public class Communicator {
+
+	String drone;
+	String name;
+	MapIF map;
+	PathPoint p;
+	private final ConsumerConnector consumer;
+
+	public Communicator(String a_groupId, String a_topic, String a_zookeeper) {
+		this.drone = a_topic;
+		this.name = a_groupId;
+		consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig(a_zookeeper, a_groupId));
+	}
+
+	public PathPoint getPath() {
+		return p;
+
+	}
+
+	public void setPath(PathPoint p) {
+		this.p = p;
+	}
+
+	private static ConsumerConfig createConsumerConfig(String a_zookeeper, String a_groupId) {
+		Properties props = new Properties();
+		props.put("zookeeper.connect", a_zookeeper);
+		props.put("group.id", a_groupId);
+		props.put("zookeeper.session.timeout.ms", "400");
+		props.put("zookeeper.sync.time.ms", "200");
+		props.put("auto.commit.interval.ms", "1000");
+
+		return new ConsumerConfig(props);
+	}
+
+	public void run(int a_numThreads, boolean mode) {
+		Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
+		
+		topicCountMap.put(drone + "-out", a_numThreads);
+		topicCountMap.put(drone + "-in", a_numThreads);
+		Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
+		List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(drone + "-out");
+		List<KafkaStream<byte[], byte[]>> streams2 = consumerMap.get(drone + "-in");
 
 
-        String drone ;
-        String name;
-        MapIF map;
-        PathPoint p;
-        private final ConsumerConnector consumer;
+		// now launch all the threads
+		//
+		ExecutorService executor = Executors.newFixedThreadPool(a_numThreads);
 
-        public Communicator(String a_groupId, String a_topic,String a_zookeeper) {
-            this.drone = a_topic;
-            this.name= a_groupId;
-            consumer = kafka.consumer.Consumer.createJavaConsumerConnector(
-                    createConsumerConfig(a_zookeeper, a_groupId));
-        }
+		// now create an object to consume the messages
+		//
+		int threadNumber = 0;
+		for (final KafkaStream stream : streams) {
+				executor.submit(new ThreadForCommunicator(stream, threadNumber, this));
+			threadNumber++;
+		}
+		for (final KafkaStream stream : streams2) {
+			executor.submit(new PathReceiverForCommunicator(stream, threadNumber, this));
+		threadNumber++;
+	}
+	}
 
-        public PathPoint getPath(){
-            return p;
-
-        }
-        public void setPath(PathPoint p){
-            this.p = p;
-        }
-
-        private static ConsumerConfig createConsumerConfig(String a_zookeeper, String a_groupId) {
-            Properties props = new Properties();
-            props.put("zookeeper.connect", a_zookeeper);
-            props.put("group.id", a_groupId);
-            props.put("zookeeper.session.timeout.ms", "400");
-            props.put("zookeeper.sync.time.ms", "200");
-            props.put("auto.commit.interval.ms", "1000");
-
-            return new ConsumerConfig(props);
-        }
-
-        public void run(int a_numThreads) {
-            Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
-            topicCountMap.put(drone, a_numThreads);
-            Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
-            List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(drone);
-
-            // now launch all the threads
-            //
-            ExecutorService executor = Executors.newFixedThreadPool(a_numThreads);
-
-            // now create an object to consume the messages
-            //
-            int threadNumber = 0;
-            for (final KafkaStream stream : streams) {
-                executor.submit(new ThreadForCommunicator(stream, threadNumber,this));
-                threadNumber++;
-            }
-        }
-        
-        public void sendPosition(PathPoint p){
-        	try {
-				Client client = Client.create();
-				WebResource webResource = client.resource("http://localhost:8080/FAAserver/service/drone/position");
-				String input = "{\"x\":\"" + p.getX() + "\",\"y\":\"" + p.getY() + "\"}";
-				ClientResponse response = webResource.type("application/json").post(ClientResponse.class, input);
-				if (response.getStatus() != 200) {
-					throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-				}
-				System.out.println("Output from Server .... \n");
-				String output = response.getEntity(String.class);
-				System.out.println(output);
-			} catch (Exception e) {
-				e.printStackTrace();
+	public void sendPosition(PathPoint p) {
+		try {
+			Client client = Client.create();
+			WebResource webResource = client.resource("http://localhost:8080/FAAserver/service/drone/position");
+			String input = "{\"x\":\"" + p.getX() + "\",\"y\":\"" + p.getY() + "\"}";
+			ClientResponse response = webResource.type("application/json").post(ClientResponse.class, input);
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
-        }
-
+//			System.out.println("Output from Server .... \n");
+			String output = response.getEntity(String.class);
+//			System.out.println(output);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void sendPath (String s) {
+		try {
+			Client client = Client.create();
+			WebResource webResource = client.resource("http://localhost:8080/FAAserver/service/drone/path");
+			ClientResponse response = webResource.type("application/text").post(ClientResponse.class, s);
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			}
+//			System.out.println("Output from Server .... \n");
+			String output = response.getEntity(String.class);
+//			System.out.println(output);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

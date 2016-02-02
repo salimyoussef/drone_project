@@ -1,10 +1,9 @@
-package services;
+package main.webapp.services;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
- 
-import javax.print.attribute.standard.Media;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
