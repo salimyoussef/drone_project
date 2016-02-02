@@ -73,25 +73,4 @@ public class CommunicatorReceiver{
             }
         }
 
-        /*@Override
-        public void notify(PathPoint p) {
-            System.out.println(p);
-            if(this.map!=null) this.map.setPossition(p);
-        }
-
-        @Override
-        public void done() {
-            System.out.println("Drone has reached its destination .....");
-        }
-
-        @Override
-        public String getName() {
-            return this.name;
-        }
-
-        @Override
-        public void setMap(MapIF map) {
-            this.map = map;
-        }*/
-
 }

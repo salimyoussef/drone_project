@@ -97,8 +97,9 @@ public class Drone implements DroneRemoteIF,Moveable {
         //System.out.print("[");
 
         for(int i = commands.size() - 1; i >=0 ; i--){
-            converter.executeCommand(commands.get(i).getAsJsonObject());
-
+            if(i%10==0){
+                converter.executeCommand(commands.get(i).getAsJsonObject());
+            }
             //System.out.print("=");
         }
         //System.out.println(">]");
