@@ -68,7 +68,7 @@ public class Drone implements DroneRemoteIF,Moveable {
         topicCountMap.put(name+"-in", a_numThreads);
         Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
         List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(name+"-in");
-
+        
         // now launch all the threads
         //
         ExecutorService executor = Executors.newFixedThreadPool(a_numThreads);

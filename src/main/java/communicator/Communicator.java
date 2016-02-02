@@ -15,31 +15,31 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CommunicatorReceiver{
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+
+public class Communicator{
 
 
         String drone ;
         String name;
         MapIF map;
-        Path p;
+        PathPoint p;
         private final ConsumerConnector consumer;
 
-        public CommunicatorReceiver(String a_groupId, String a_topic,String a_zookeeper) {
+        public Communicator(String a_groupId, String a_topic,String a_zookeeper) {
             this.drone = a_topic;
             this.name= a_groupId;
-		/*this.mediator = EventMediatorLocator.mediator();
-		this.mediator.registerTracer(drone,this);*/
             consumer = kafka.consumer.Consumer.createJavaConsumerConnector(
                     createConsumerConfig(a_zookeeper, a_groupId));
-
-            System.out.println(this.name +" is ready to trace "+drone);
         }
 
-        public Path getPath(){
+        public PathPoint getPath(){
             return p;
 
         }
-        public void setPath(Path p){
+        public void setPath(PathPoint p){
             this.p = p;
         }
 
@@ -72,26 +72,22 @@ public class CommunicatorReceiver{
                 threadNumber++;
             }
         }
-
-        /*@Override
-        public void notify(PathPoint p) {
-            System.out.println(p);
-            if(this.map!=null) this.map.setPossition(p);
+        
+        public void sendPosition(PathPoint p){
+        	try {
+				Client client = Client.create();
+				WebResource webResource = client.resource("http://localhost:8080/FAAserver/service/drone/position");
+				String input = "{\"x\":\"" + p.getX() + "\",\"y\":\"" + p.getY() + "\"}";
+				ClientResponse response = webResource.type("application/json").post(ClientResponse.class, input);
+				if (response.getStatus() != 200) {
+					throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+				}
+				System.out.println("Output from Server .... \n");
+				String output = response.getEntity(String.class);
+				System.out.println(output);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
         }
-
-        @Override
-        public void done() {
-            System.out.println("Drone has reached its destination .....");
-        }
-
-        @Override
-        public String getName() {
-            return this.name;
-        }
-
-        @Override
-        public void setMap(MapIF map) {
-            this.map = map;
-        }*/
 
 }
