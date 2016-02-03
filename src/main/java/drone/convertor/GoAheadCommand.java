@@ -3,7 +3,8 @@ package drone.convertor;
 import com.google.gson.JsonObject;
 import path.PathPoint;
 import pathToNavCommands.Command;
-import drone.Moveable;;import java.rmi.RemoteException;
+import drone.Moveable;
+import java.rmi.RemoteException;
 
 public class GoAheadCommand implements Command {
 	

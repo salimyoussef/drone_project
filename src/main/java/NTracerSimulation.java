@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+
+import communicator.Communicator;
+
 public class NTracerSimulation {
 
     public static void main(String args[]) {
@@ -35,13 +41,13 @@ public class NTracerSimulation {
         }
     }
 
-    static class TracerTask implements Runnable {
+	static class TracerTask implements Runnable {
 
-        int id;
+		int id;
 
-        public TracerTask(int id) {
-            this.id = id;
-        }
+		public TracerTask(int id) {
+			this.id = id;
+		}
 
         @Override
         public void run() {
@@ -63,14 +69,13 @@ public class NTracerSimulation {
             System.out.println(start + ":" + destination);
             Path p = pathPlanner.findPath(new AdressEndPoints(start, destination));
 
-            /*ArrayList<PathPoint> path = new ArrayList<>();
-            for(int i=0; i<30;i++){
-                path.add(new PathPoint(10+i,20,12));
-            }*/
 
-            CommandsProvider provider = new CommandsProvider("drone"+id);
-            provider.setPath(p.getPathPoints());
-            provider.sendCommands();
+			Communicator c = new Communicator("COM" + id, "drone" + id, "localhost:" + MyConstants.KAFKA_ZK_PORT);
+			c.run(1, false);
+
+			CommandsProvider provider = new CommandsProvider("drone" + id);
+			provider.setPath(p.getPathPoints());
+			provider.sendCommands();
 
             try {
                 synchronized (this){
@@ -93,7 +98,7 @@ public class NTracerSimulation {
                 e.printStackTrace();
             }
 
-        }
+		}
 
-    }
+	}
 }

@@ -1,6 +1,7 @@
 package tracer;
 
 import com.google.gson.Gson;
+
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import org.json.JSONObject;
