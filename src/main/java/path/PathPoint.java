@@ -4,11 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
-import java.io.Serializable;
 
 @Generated("org.jsonschema2pojo")
 public class PathPoint {
-	
+
 	@SerializedName("x")
 	@Expose
 	private double x;
@@ -54,13 +53,10 @@ public class PathPoint {
 
 	@Override
 	public String toString() {
-		return "{\n" +
-				"  'log':" + x +
-				",\n  'lat':" + y +
-				"\n}";
+		return "{\n" + "  'log':" + x + ",\n  'lat':" + y + "\n}";
 	}
 
-	public static void main(String args[]){
-		System.out.println(new PathPoint(4,1,5));
+	public static void main(String args[]) {
+		System.out.println(new PathPoint(4, 1, 5));
 	}
 }

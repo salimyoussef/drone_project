@@ -4,30 +4,35 @@ import java.io.Serializable;
 
 public class Location implements Serializable {
 
-	 private double latitude;
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = 1L;
 
-	 private double longitude;
+	private double latitude;
 
-	 public Location() {
+	private double longitude;
 
-	 }
+	public Location() {
 
-	 public Location(Double latitude, Double longitude) {
-	  this.latitude = latitude;
-	  this.longitude = longitude;
-	 }
-	 
-	 /**
-	  * @return the latitude
-	  */
-	 public double getLatitude() {
-	  return latitude;
-	 }
-
-	 /**
-	  * @return the longitude
-	  */
-	 public double getLongitude() {
-	  return longitude;
-	 }
 	}
+
+	public Location(Double latitude, Double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
+	/**
+	 * @return the latitude
+	 */
+	public double getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	public double getLongitude() {
+		return longitude;
+	}
+}

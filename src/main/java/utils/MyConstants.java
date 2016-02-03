@@ -4,9 +4,9 @@ package utils;
  * Created by sy306571 on 28/01/16.
  */
 public class MyConstants {
-    public static final int KAFKA_ZK_PORT = 2181;
-    public static final int INITIAL_BROKER_PORT = 9092;
-    public static final int NUMBER_OF_DRONES = 2;
-    public static final int NUMBER_OF_BROKERS = 1;
-    public static final int NUMBER_OF_ZOOKEEPER = 1;
+	public static final int KAFKA_ZK_PORT = 2181;
+	public static final int INITIAL_BROKER_PORT = 9092;
+	public static final int NUMBER_OF_DRONES = 5;
+	public static final int NUMBER_OF_BROKERS = 1;
+	public static final int NUMBER_OF_ZOOKEEPER = 1;
 }

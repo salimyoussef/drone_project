@@ -5,8 +5,6 @@ import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 import maps.MapIF;
 import path.*;
-import remotes.TracerIF;
-import tracer.ConsumerTest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,13 +53,12 @@ public class Communicator {
 
 	public void run(int a_numThreads, boolean mode) {
 		Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
-		
+
 		topicCountMap.put(drone + "-out", a_numThreads);
 		topicCountMap.put(drone + "-in", a_numThreads);
 		Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
 		List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(drone + "-out");
 		List<KafkaStream<byte[], byte[]>> streams2 = consumerMap.get(drone + "-in");
-
 
 		// now launch all the threads
 		//
@@ -71,13 +68,13 @@ public class Communicator {
 		//
 		int threadNumber = 0;
 		for (final KafkaStream stream : streams) {
-				executor.submit(new ThreadForCommunicator(stream, threadNumber, this));
+			executor.submit(new ThreadForCommunicator(stream, threadNumber, this));
 			threadNumber++;
 		}
 		for (final KafkaStream stream : streams2) {
 			executor.submit(new PathReceiverForCommunicator(stream, threadNumber, this));
-		threadNumber++;
-	}
+			threadNumber++;
+		}
 	}
 
 	public void sendPosition(PathPoint p) {
@@ -89,14 +86,15 @@ public class Communicator {
 			if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
-//			System.out.println("Output from Server .... \n");
-			String output = response.getEntity(String.class);
-//			System.out.println(output);
+			// System.out.println("Output from Server .... \n");
+			// String output = response.getEntity(String.class);
+			// System.out.println(output);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public void sendPath (String s) {
+
+	public void sendPath(String s) {
 		try {
 			Client client = Client.create();
 			WebResource webResource = client.resource("http://localhost:8080/FAAserver/service/drone/path");
@@ -104,9 +102,9 @@ public class Communicator {
 			if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
-//			System.out.println("Output from Server .... \n");
-			String output = response.getEntity(String.class);
-//			System.out.println(output);
+			// System.out.println("Output from Server .... \n");
+			// String output = response.getEntity(String.class);
+			// System.out.println(output);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

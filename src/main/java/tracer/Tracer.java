@@ -9,33 +9,32 @@ import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 import maps.MapIF;
 import path.PathPoint;
-import remotes.MediatorIF;
 import remotes.TracerIF;
-import utils.MyConstants;
 
 public class Tracer implements TracerIF {
 
-	String drone ;
+	String drone;
 	String name;
-    MapIF map;
+	MapIF map;
 	private final ConsumerConnector consumer;
 
-	public Tracer(String a_groupId, String a_topic,String a_zookeeper) {
+	public Tracer(String a_groupId, String a_topic, String a_zookeeper) {
 		this.drone = a_topic;
-		this.name= a_groupId;
-		/*this.mediator = EventMediatorLocator.mediator();
-		this.mediator.registerTracer(drone,this);*/
-		consumer = kafka.consumer.Consumer.createJavaConsumerConnector(
-				createConsumerConfig(a_zookeeper, a_groupId));
+		this.name = a_groupId;
+		/*
+		 * this.mediator = EventMediatorLocator.mediator();
+		 * this.mediator.registerTracer(drone,this);
+		 */
+		consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig(a_zookeeper, a_groupId));
 
-		System.out.println(this.name +" is ready to trace "+drone);
+		System.out.println(this.name + " is ready to trace " + drone);
 	}
 
 	private static ConsumerConfig createConsumerConfig(String a_zookeeper, String a_groupId) {
 		Properties props = new Properties();
 		props.put("zookeeper.connect", a_zookeeper);
 		props.put("group.id", a_groupId);
-		//props.put("zookeeper.session.timeout.ms", "400");
+		// props.put("zookeeper.session.timeout.ms", "400");
 		props.put("zookeeper.sync.time.ms", "200");
 		props.put("auto.commit.interval.ms", "1000");
 
@@ -44,9 +43,9 @@ public class Tracer implements TracerIF {
 
 	public void run(int a_numThreads) {
 		Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
-		topicCountMap.put(drone+"-out", a_numThreads);
+		topicCountMap.put(drone + "-out", a_numThreads);
 		Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
-		List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(drone+"-out");
+		List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(drone + "-out");
 
 		// now launch all the threads
 		//
@@ -56,7 +55,7 @@ public class Tracer implements TracerIF {
 		//
 		int threadNumber = 0;
 		for (final KafkaStream stream : streams) {
-			executor.submit(new ConsumerTest(stream, threadNumber,drone,this));
+			executor.submit(new ConsumerTest(stream, threadNumber, drone, this));
 			threadNumber++;
 		}
 	}
@@ -64,7 +63,8 @@ public class Tracer implements TracerIF {
 	@Override
 	public void notify(PathPoint p) {
 		System.out.println(p);
-		if(this.map!=null) this.map.setPossition(p);
+		if (this.map != null)
+			this.map.setPossition(p);
 	}
 
 	@Override
@@ -77,17 +77,20 @@ public class Tracer implements TracerIF {
 		return this.name;
 	}
 
-    @Override
-    public void setMap(MapIF map) {
-        this.map = map;
-    }
+	@Override
+	public void setMap(MapIF map) {
+		this.map = map;
+	}
 
-	/*public void goDrone(){
+	/*
+	 * public void goDrone(){
+	 * 
+	 * }
+	 */
 
-	}*/
-
-	/*public static void main(String args[]) {
-		Tracer tracer = new Tracer("id3","drone","localhost:"+ MyConstants.KAFKA_ZK_PORT);
-		tracer.run(1);
-	}*/
+	/*
+	 * public static void main(String args[]) { Tracer tracer = new
+	 * Tracer("id3","drone","localhost:"+ MyConstants.KAFKA_ZK_PORT);
+	 * tracer.run(1); }
+	 */
 }

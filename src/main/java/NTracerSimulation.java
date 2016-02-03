@@ -2,21 +2,16 @@ import endPoints.AdressEndPoints;
 import maps.GoogleMap;
 import maps.MapIF;
 import path.Path;
-import path.PathPoint;
 import pathFinder.GooglePathFinder;
 import pathFinder.PathPlannerStrategy;
 import pathToNavCommands.CommandsProvider;
 import tracer.Tracer;
 import utils.MyConstants;
-
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Random;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-
 import communicator.Communicator;
 
 public class NTracerSimulation {
@@ -40,9 +35,9 @@ public class NTracerSimulation {
 		public void run() {
 			// int nb_topics_per_zookeeper =
 			// MyConstants.NUMBER_OF_DRONES/MyConstants.NUMBER_OF_ZOOKEEPER;
-			Random genetator = new Random();
+			// Random genetator = new Random();
 			// String drone = EventMediatorLocator.mediator().allocateDrone();
-			String dest[] = { "Dijon", "Lille", "Rennes", "Tours", "Caen", "Nantes", "Angers" };
+			String dest[] = { "Dijon", "Rennes", "Tours", "Caen", "Nantes", "Angers" };
 			Random random = new Random();
 			int idx1 = random.nextInt(7);
 			String destination = dest[idx1];
@@ -63,7 +58,7 @@ public class NTracerSimulation {
 			 * i<30;i++){ path.add(new PathPoint(10+i,20,12)); }
 			 */
 
-			Communicator c = new Communicator("COM" + id, "drone" + id, "localhost:" + MyConstants.KAFKA_ZK_PORT);
+			Communicator c = new Communicator("com" + id, "drone" + id, "localhost:" + MyConstants.KAFKA_ZK_PORT);
 			c.run(1, false);
 
 			CommandsProvider provider = new CommandsProvider("drone" + id);
@@ -82,7 +77,7 @@ public class NTracerSimulation {
 					Client client = Client.create();
 					WebResource webResource = client.resource("http://localhost:8080/FAAserver/service/drone/path");
 					String input = "{";
-					for (int i = 0; i < p.getLength(); i++) {
+					for (int i = 0; i < p.getLength() / 10; i = i + 10) {
 						input = input + "{x:" + p.getPathPoint(i).getX() + " y:" + p.getPathPoint(i).getY() + "} ";
 					}
 					input = input + "}";
@@ -91,7 +86,7 @@ public class NTracerSimulation {
 						throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 					}
 					// System.out.println("Output from Server .... \n");
-					String output = response.getEntity(String.class);
+					// String output = response.getEntity(String.class);
 					// System.out.println(output);
 				} catch (Exception e) {
 					e.printStackTrace();
