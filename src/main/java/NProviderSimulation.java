@@ -1,12 +1,7 @@
-import endPoints.AdressEndPoints;
-import path.Path;
 import path.PathPoint;
-import pathFinder.GooglePathFinder;
-import pathFinder.PathPlannerStrategy;
 import pathToNavCommands.CommandsProvider;
 import utils.MyConstants;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by sy306571 on 30/01/16.
@@ -30,7 +25,7 @@ public class NProviderSimulation {
 
 		@Override
 		public void run() {
-			Random genetator = new Random();
+			// Random genetator = new Random();
 			// String drone = EventMediatorLocator.mediator().allocateDrone();
 			// String dest[] = {"Dijon", "Lille", "Rennes", "Tours", "Caen",
 			// "Nantes", "Angers"};
@@ -45,9 +40,10 @@ public class NProviderSimulation {
 
 			// String start = dest[idx2];
 			String start = "Lille";
-			PathPlannerStrategy pathPlanner = new GooglePathFinder();
+			// PathPlannerStrategy pathPlanner = new GooglePathFinder();
 			System.out.println(start + ":" + destination);
-			Path p = pathPlanner.findPath(new AdressEndPoints(start, destination));
+			// Path p = pathPlanner.findPath(new AdressEndPoints(start,
+			// destination));
 
 			ArrayList<PathPoint> path = new ArrayList<>();
 			for (int i = 0; i < 30; i++) {

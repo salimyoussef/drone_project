@@ -1,19 +1,9 @@
 package drone;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
-import kafka.utils.Json;
-import org.json.JSONArray;
-import remotes.DroneRemoteIF;
-
-import java.util.ArrayList;
 
 /**
  * Created by sy306571 on 29/01/16.

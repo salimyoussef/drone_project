@@ -10,18 +10,21 @@ import pathToNavCommands.JsonToCommandStrategy;
 public class DummyJsonConverter implements JsonToCommandStrategy {
 
 	private static HashMap<String, Command> commands = new HashMap<>();
-	static{
+
+	static {
 		commands.put("goAhead", new GoAheadCommand());
 	}
 
 	Moveable drone;
-  	public DummyJsonConverter(Moveable drone) {this.drone = drone; }
 
-@Override
-public void executeCommand(JsonObject jsonCommand) {
-	Command command = commands.get(jsonCommand.get("idCommand").getAsString());
-	command.execute(drone,jsonCommand);
-}
-  
-}
+	public DummyJsonConverter(Moveable drone) {
+		this.drone = drone;
+	}
 
+	@Override
+	public void executeCommand(JsonObject jsonCommand) {
+		Command command = commands.get(jsonCommand.get("idCommand").getAsString());
+		command.execute(drone, jsonCommand);
+	}
+
+}

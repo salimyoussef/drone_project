@@ -20,6 +20,10 @@ import utils.MyConstants;
 
 public class Drone implements DroneRemoteIF, Moveable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	JsonArray commands;
 	Producer<String, String> producer;
 	private final ConsumerConnector consumer;
@@ -101,7 +105,7 @@ public class Drone implements DroneRemoteIF, Moveable {
 			// System.out.print("=");
 		}
 		// System.out.println(">]");
-		// System.out.println("Drone has reached its destination .....");
+		 System.out.println("Drone has reached its destination .....");
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  * Created by mohannad on 02/01/16.
  */
 public class EventMediatorLocator {
-    public static MediatorIF mediator() throws RemoteException, NotBoundException, MalformedURLException {
-        return (MediatorIF) Naming.lookup("eventmediator0");
-    }
+	public static MediatorIF mediator() throws RemoteException, NotBoundException, MalformedURLException {
+		return (MediatorIF) Naming.lookup("eventmediator0");
+	}
 }

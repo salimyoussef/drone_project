@@ -1,15 +1,7 @@
 package communicator;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
-import path.PathPoint;
 
 public class PathReceiverForCommunicator implements Runnable {
 	private KafkaStream<byte[], byte[]> m_stream;
@@ -33,7 +25,7 @@ public class PathReceiverForCommunicator implements Runnable {
 
 			// method for sending the json(postion) with interval (not every
 			// position)
-				receiver.sendPath(msg);
+			receiver.sendPath(msg);
 
 			// "("+json.getString("x")+","+json.getString("y")+","+json.getString("z")+")
 			// ***");

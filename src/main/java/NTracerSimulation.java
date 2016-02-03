@@ -2,22 +2,19 @@ import endPoints.AdressEndPoints;
 import maps.GoogleMap;
 import maps.MapIF;
 import path.Path;
-import path.PathPoint;
 import pathFinder.GooglePathFinder;
 import pathFinder.PathPlannerStrategy;
 import pathToNavCommands.CommandsProvider;
 import tracer.Tracer;
 import utils.MyConstants;
-
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-
 import communicator.Communicator;
 
 public class NTracerSimulation {
@@ -69,8 +66,7 @@ public class NTracerSimulation {
             System.out.println(start + ":" + destination);
             Path p = pathPlanner.findPath(new AdressEndPoints(start, destination));
 
-
-			Communicator c = new Communicator("COM" + id, "drone" + id, "localhost:" + MyConstants.KAFKA_ZK_PORT);
+			Communicator c = new Communicator("com" + id, "drone" + id, "localhost:" + MyConstants.KAFKA_ZK_PORT);
 			c.run(1, false);
 
 			CommandsProvider provider = new CommandsProvider("drone" + id);
@@ -97,7 +93,6 @@ public class NTracerSimulation {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-
 		}
 
 	}
