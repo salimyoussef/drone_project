@@ -54,6 +54,12 @@ public class CommandsProvider {
         producer.send(data);
     }
 
+    public void sendGoCommand(){
+        String msg = "go!";
+        KeyedMessage<String, String> data = new KeyedMessage<>(drone+"-in", msg);
+        producer.send(data);
+    }
+
     public static class PathToJsonCommandConverter {
 
         public static JsonArray convertPath(List<PathPoint> path) {

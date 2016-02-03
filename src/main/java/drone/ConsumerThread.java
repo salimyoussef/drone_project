@@ -30,17 +30,16 @@ public class ConsumerThread implements Runnable {
 
         while (it.hasNext()){
             String msg = new String(it.next().message());
-            //if(msg.equals("Finished")){
-
-            JsonParser j = new JsonParser();
-            JsonArray arrayCommands = (JsonArray) j.parse(msg);
-            //String[] arrayCommands = msg.substring(1,msg.length()-1).split(", ");
-            drone.loadPath(arrayCommands);
-            drone.go();
-           /* }
+            if(msg.equals("go!")){
+                drone.go();
+            }
             else{
-                commands.add(msg);
-            }*/
+                JsonParser j = new JsonParser();
+                JsonArray arrayCommands = (JsonArray) j.parse(msg);
+                //String[] arrayCommands = msg.substring(1,msg.length()-1).split(", ");
+                drone.loadPath(arrayCommands);
+            }
+
             //System.out.println("*** Drone moved to these coordinates "+json.getDouble("x"));
             // "("+json.getString("x")+","+json.getString("y")+","+json.getString("z")+") ***");
         }
