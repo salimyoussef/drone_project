@@ -23,15 +23,24 @@ public class Path {
 		return this.rout.iterator();
 	}
 
-	public PathPoint getFirst(){
+	public PathPoint getFirst() {
 		return this.rout.get(0);
 	}
-	public PathPoint getLast(){
-		return this.rout.get(this.rout.size()-1);
+
+	public PathPoint getLast() {
+		return this.rout.get(this.rout.size() - 1);
 	}
 
-	public ArrayList<PathPoint> getPathPoints(){
+	public ArrayList<PathPoint> getPathPoints() {
 		return this.rout;
+	}
+
+	public int getLength() {
+		return this.rout.size();
+	}
+
+	public PathPoint getPathPoint(int i) {
+		return this.rout.get(i);
 	}
 
 }
