@@ -66,9 +66,6 @@ public class NTracerSimulation {
             System.out.println(start + ":" + destination);
             Path p = pathPlanner.findPath(new AdressEndPoints(start, destination));
 
-			Communicator c = new Communicator("com" + id, "drone" + id, "localhost:" + MyConstants.KAFKA_ZK_PORT);
-			c.run(1, false);
-
 			CommandsProvider provider = new CommandsProvider("drone" + id);
 			provider.setPath(p.getPathPoints());
 			provider.sendCommands();

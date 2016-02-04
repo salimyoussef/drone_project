@@ -36,6 +36,14 @@ public class Communicator {
 
 	}
 
+	public String getDrone() {
+		return drone;
+	}
+
+	public void setDrone(String drone) {
+		this.drone = drone;
+	}
+
 	public void setPath(PathPoint p) {
 		this.p = p;
 	}
@@ -51,11 +59,11 @@ public class Communicator {
 		return new ConsumerConfig(props);
 	}
 
-	public void run(int a_numThreads, boolean mode) {
+	public void run(int a_numThreads) {
 		Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
 
-		topicCountMap.put(drone + "-out", a_numThreads);
-		topicCountMap.put(drone + "-in", a_numThreads);
+		topicCountMap.put(drone + "-out", 1);
+		topicCountMap.put(drone + "-in", 1);
 		Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap);
 		List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(drone + "-out");
 		List<KafkaStream<byte[], byte[]>> streams2 = consumerMap.get(drone + "-in");
@@ -66,15 +74,16 @@ public class Communicator {
 
 		// now create an object to consume the messages
 		//
-		int threadNumber = 0;
+		int threadNumber = 0;for (final KafkaStream stream : streams2) {
+			executor.submit(new PathReceiverForCommunicator(stream, threadNumber, this));
+			threadNumber++;
+		}
 		for (final KafkaStream stream : streams) {
 			executor.submit(new ThreadForCommunicator(stream, threadNumber, this));
 			threadNumber++;
 		}
-		for (final KafkaStream stream : streams2) {
-			executor.submit(new PathReceiverForCommunicator(stream, threadNumber, this));
-			threadNumber++;
-		}
+		
+		
 	}
 
 	public void sendPosition(PathPoint p) {
